@@ -3,7 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EmployeeInfo.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Web;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace EmployeeInfo.Controllers
 {
@@ -17,37 +23,75 @@ namespace EmployeeInfo.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.ShowLogin = true;
             return View();
         }
 
         [HttpPost]
-        public IActionResult Index(Login ob)
+        public async Task<IActionResult> IndexAsync(Login ob)
         {
-            Login obj = _db.Admins_Login.Find(ob.Id);
-            if (obj!=null)
+            if (ModelState.IsValid)
             {
-                return RedirectToAction("AllEmployees");
-            }
-            obj = _db.Employees_Login.Find(ob.Id);
-            if (obj!=null)
-            {
-                if((_db.Employees.FirstOrDefault(u => u.EmployeeId == ob.Id)) != null)
+                Ad_Login obj1 = _db.Admins_Login.Find(ob.Id);
+                if (obj1 != null)
                 {
-                    return RedirectToAction("Details2", new { id = ob.Id });
+                    var claims = new List<Claim>
+                                {
+                                    new Claim(ClaimTypes.NameIdentifier,obj1.Id.ToString()),
+                                    new Claim(ClaimTypes.Role, "Admin"),
+                                };
+
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    //var authProperties = new AuthenticationProperties();
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity));
+                    return RedirectToAction("AllEmployees");
                 }
-                return RedirectToAction("Create");
+                Employee_Login obj2 = _db.Employees_Login.Find(ob.Id);
+                if (obj2 != null)
+                {
+                    var claims = new List<Claim>
+                                {
+                                    new Claim(ClaimTypes.NameIdentifier,obj2.Id.ToString()),
+                                    new Claim(ClaimTypes.Role, "Employee"),
+                                };
+
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var authProperties = new AuthenticationProperties();
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity),
+                        authProperties);
+                    if ((_db.Employees.FirstOrDefault(u => u.EmployeeId == ob.Id)) != null)
+                    {
+                        return RedirectToAction("Details2", new { id = ob.Id });
+                    }
+                    return RedirectToAction("Create");
+                }
+                return NotFound();
             }
-            return NotFound();
+            return View(ob);
+            
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index");
+        }
+
         //AllEmployees
         public IActionResult AllEmployees()
         {
+            
+            ViewBag.ShowLogin = false;
             IEnumerable<Employee> objList = _db.Employees;
             return View(objList);
         }
         //GET_REGISTRATION
         public IActionResult Registration()
         {
+            ViewBag.ShowLogin = true;
             return View();
         }
         //POST-REGISTRATION
@@ -55,9 +99,11 @@ namespace EmployeeInfo.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Registration(Login ob)
         {
-            Employee_Login obj = new Employee_Login();
-            obj.Id = ob.Id;
-            obj.Password = ob.Password;
+            Employee_Login obj = new Employee_Login
+            {
+                Id = ob.Id,
+                Password = ob.Password
+            };
             if (ModelState.IsValid)
             {
                 _db.Employees_Login.Add(obj);
@@ -69,6 +115,8 @@ namespace EmployeeInfo.Controllers
         //CREATE
         public IActionResult Create()
         {
+            
+            ViewBag.ShowLogin = false;
             return View();
         }
         //POST-CREATE
@@ -76,6 +124,7 @@ namespace EmployeeInfo.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Employee ob)
         {
+
             if (ModelState.IsValid)
             {
                 _db.Employees.Add(ob);
@@ -92,6 +141,7 @@ namespace EmployeeInfo.Controllers
             {
                 return NotFound();
             }
+            ViewBag.ShowLogin = false;
             return View(ob);
         }
 
@@ -103,6 +153,7 @@ namespace EmployeeInfo.Controllers
             {
                 return NotFound();
             }
+            ViewBag.ShowLogin = false;
             return View(ob);
         }
 
@@ -114,6 +165,7 @@ namespace EmployeeInfo.Controllers
             {
                 return NotFound();
             }
+            ViewBag.ShowLogin = false;
             return View(ob);
         }
         //POST-EDIT
@@ -137,6 +189,7 @@ namespace EmployeeInfo.Controllers
             {
                 return NotFound();
             }
+            ViewBag.ShowLogin = false;
             return View(ob);
         }
         //POST-DELETE

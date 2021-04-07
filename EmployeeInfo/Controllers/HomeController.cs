@@ -20,17 +20,16 @@ namespace EmployeeInfo.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.ShowLogin = true;
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
+            ViewBag.ShowLogin = true;
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
