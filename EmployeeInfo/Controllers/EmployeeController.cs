@@ -80,7 +80,7 @@ namespace EmployeeInfo.Controllers
             {
                 _db.Employees.Add(ob);
                 _db.SaveChanges();
-                return RedirectToAction("Details//" + ob.EmployeeId);
+                return RedirectToAction("Details" , new { id = ob.EmployeeId });
             }
             return View(ob);
         }
