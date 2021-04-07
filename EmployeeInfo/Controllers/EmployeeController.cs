@@ -33,7 +33,7 @@ namespace EmployeeInfo.Controllers
             {
                 if((_db.Employees.FirstOrDefault(u => u.EmployeeId == ob.Id)) != null)
                 {
-                    return RedirectToAction("Details", new { id = ob.Id });
+                    return RedirectToAction("Details2", new { id = ob.Id });
                 }
                 return RedirectToAction("Create");
             }
