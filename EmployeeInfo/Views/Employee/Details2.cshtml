@@ -40,11 +40,8 @@
                asp-route-Id="@Model.EmployeeId" class="btn btn-info w-50 mx-2" >
                 <i class="fas fa-edit"></i>
             </a>
-        <a class="btn btn-danger w-50 mx-2" asp-controller="Employee" asp-action="Delete" asp-route-Id="@Model.EmployeeId" >
-            <i class="fas fa-trash-alt"></i>
-        </a>
-            <a asp-action="AllEmployees" class="btn btn-success w-50  mx-2" id="delete">
-                <i class="fas fa-sign-out-alt"></i>&nbsp;Back To List
+            <a asp-action="Index" class="btn btn-success w-50  mx-2" id="delete">
+                <i class="fas fa-sign-out-alt"></i>&nbsp;Back
             </a>
         </div>
     </div>

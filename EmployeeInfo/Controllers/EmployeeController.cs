@@ -80,12 +80,23 @@ namespace EmployeeInfo.Controllers
             {
                 _db.Employees.Add(ob);
                 _db.SaveChanges();
-                return RedirectToAction("Details" , new { id = ob.EmployeeId });
+                return RedirectToAction("Details2" , new { id = ob.EmployeeId });
             }
             return View(ob);
         }
         //DETAILS
         public IActionResult Details(int? id)
+        {
+            var ob = _db.Employees.Find(id);
+            if (ob == null)
+            {
+                return NotFound();
+            }
+            return View(ob);
+        }
+
+        //DETAILS2
+        public IActionResult Details2(int? id)
         {
             var ob = _db.Employees.Find(id);
             if (ob == null)
