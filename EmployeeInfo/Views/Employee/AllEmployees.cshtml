@@ -1,0 +1,46 @@
+﻿@model IEnumerable<EmployeeInfo.Models.Employee>
+
+<div class="container my-4">
+    <div class="row py-5">
+        <div class="col-8">
+            <h2 class="text-primary">Employee List</h2>
+        </div>
+    </div>
+    @if (Model.Count() > 0)
+    {
+        <table class="table table-bordered table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        Employee Id
+                    </th>
+                    <th>
+                        Employee Name
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var ob in Model)
+                {
+                    <tr>
+                        <td width="30%">@ob.EmployeeId</td>
+                        <td width="40%">@ob.Name</td>
+                        <td class="text-center">
+                            <div class="w-75 btn-group" role="group">
+                                <a asp-controller="Employee" asp-action="Details"
+                                   asp-route-Id="@ob.EmployeeId" class="btn btn-success mx-2">
+                                    See Full Details
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No Employee info exists.</p>
+    }
+</div>

@@ -1,0 +1,93 @@
+﻿@model EmployeeInfo.Models.Employee
+<form method="post">
+    <input type="hidden" asp-for="EmployeeId" />
+
+    <div class="border p-3">
+        <div class="form-group row">
+            <h2 class="text-info pl-3">Edit Employee Details</h2>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-8">
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="EmployeeId"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="EmployeeId" class="form-control" />
+                        <span asp-validation-for="EmployeeId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="Name"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="ContactNumber"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="ContactNumber" class="form-control" />
+                        <span asp-validation-for="ContactNumber" class="textdanger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="Address"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="Address" class="form-control" />
+                        <span asp-validation-for="Address" class="textdanger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="Note"></label>
+                    </div>
+                    <div class="col-8">
+                        <textarea asp-for="Note" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="Note" class="textdanger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="Salary"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="Salary" class="form-control" />
+                        <span asp-validation-for="Salary" class="textdanger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-8 offset-4 row">
+                        <div class="col">
+                            <input type="submit" class="btn btn-info w-100"
+                                   value="Update" />
+                        </div>
+                        <div class="col">
+                            <a onclick="window.history.back()" class="btn btn-success w-100">
+                                <i class="fas fa-sign-out-alt"></i>&nbsp;Back
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                @* Keep this empty *@
+            </div>
+        </div>
+    </div>
+</form>
+
+@*Client side validation*@
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
+
